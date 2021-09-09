@@ -1,7 +1,9 @@
 <h1> destroy <h1>
 
 <p> User that has been deleted</p>
-<p> name: <%= @u.id %></p>
+<p> name: <%= @u.name %></p>
 <p> email: <%= @u.email %> </p>
+<p> birthday: <%= @u.birthday%> </p>
 
-<%= link_to 'Index', users_path %>
+<%= link_to 'index', users_path %>
+<%= link_to 're-crate', '/create_fast?name=' + @u.name + '&email=' + @u.email %>

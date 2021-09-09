@@ -52,6 +52,12 @@ class UsersController < ApplicationController
     @u = @user.destroy
   end
 
+  def create_fast
+    @user = User.new()
+    @user.name = params[:name]
+    @user.email = params[:email]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_user
