@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_22_165435) do
+ActiveRecord::Schema.define(version: 2021_10_06_131831) do
 
   create_table "posts", force: :cascade do |t|
     t.string "msg"
@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2021_09_22_165435) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "address"
     t.string "postal_code"
-    t.string "password"
+    t.string "password_digest"
   end
 
   add_foreign_key "posts", "users"

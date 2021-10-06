@@ -1,5 +1,8 @@
 class PostsController < ApplicationController
   before_action :set_post, only: %i[ show edit update destroy ]
+  before_action :login_check
+  before_action :user_check, only: %i[ show edit update destroy ]
+  before_action :create_check, only: %i[ create ]
 
   # GET /posts or /posts.json
   def index
@@ -13,8 +16,7 @@ class PostsController < ApplicationController
   # GET /posts/new
   def new
     @post = Post.new
-    @post.user_id=Integer(params[:id])
-    @user=User.find(Integer(params[:id]))
+    @post.user_id = params[:user_id]
   end
 
   # GET /posts/1/edit
@@ -25,13 +27,12 @@ class PostsController < ApplicationController
   def create
     @post = Post.new(post_params)
 
-
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: "Post was successfully created." }
+        format.html { redirect_to @post, notice: "Post was successfully created." } 
         format.json { render :show, status: :created, location: @post }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, user_id: @post.user_id, status: :unprocessable_entity }
         format.json { render json: @post.errors, status: :unprocessable_entity }
       end
     end
@@ -69,5 +70,23 @@ class PostsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def post_params
       params.require(:post).permit(:msg, :datepost, :user_id)
+    end
+
+    def login_check
+      if !session[:user_id]
+        redirect_to main_path, alert: "Please login."
+      end
+    end
+
+    def user_check
+      if session[:user_id] != @post.user_id 
+        redirect_to main_path, alert: "Wrong User. Please try again"
+      end
+    end
+
+    def create_check 
+      if session[:user_id] != Integer(post_params[:user_id])
+        redirect_to main_path, alert: "Wrong User. Please try again"
+      end
     end
 end
